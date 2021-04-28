@@ -1,5 +1,5 @@
 const livealertApi = {
-  url: 'http://localhost:4242',
+  url: 'http://localhost:3131',
   version: '',
   path: '/live/sardoche',
 };
