@@ -39,9 +39,9 @@ const fetchLive = async () => {
   return res.json();
 };
 
-const handleChange = ({ onair = false, next, skins = [] }) => {
+const handleChange = ({ onair = false, next = 0, skins = [] }) => {
   const now = new Date();
-  const nextLive = new Date(next ?? 0);
+  const nextLive = new Date(next);
   const hasSchedule = isAfter(nextLive, now);
   const isDisplayed = hasSchedule && differenceInHours(nextLive, now) <= 12;
   const isCounted = hasSchedule && differenceInMinutes(nextLive, now) <= 5;
@@ -59,6 +59,14 @@ const handleChange = ({ onair = false, next, skins = [] }) => {
   });
 };
 
+// ---------------------------------------------------------------------------
+
+setSkin({
+  badgetxt: 'Off',
+  badgecolor: 'dodgerblue',
+  badge: 'icons/128-dark.png',
+});
+
 poll(async () => {
   let offlineTimeout = null;
 
@@ -74,7 +82,7 @@ poll(async () => {
     console.error(err);
     if (offlineTimeout) return;
 
-    console.error(
+    console.info(
       "setting the live to off in 5min if the api isn't back online"
     );
 
