@@ -1,17 +1,12 @@
 import React from 'react';
 
-const FooterButton = ({
-  onClick,
-  href = '#',
-  backgroundColor = 'unset',
-  children,
-}) => (
+const FooterButton = ({ onClick, href = '#', className = '', children }) => (
   <a
+    className={`p-2 h-full flex items-center ${className}`}
     onClick={onClick}
     href={href}
     target="_blank"
     rel="noreferrer"
-    style={{ backgroundColor: backgroundColor }}
   >
     {children}
   </a>

@@ -18,13 +18,17 @@ const LinkBox = ({
     href={url}
     target="_blank"
     rel="noreferrer"
-    className="flex items-center p-4"
+    className="h-full flex items-center p-3 min-h-22"
     style={{ backgroundImage: `url(${background || backgroundImage})` }}
   >
-    <img src={icon} alt="icone du live" />
-    <div className="flex flex-col px-4">
-      <p>{title}</p>
-      {description && <p>{description}</p>}
+    <img src={icon} className="h-12" alt="Icone du live" />
+    <div className="flex-grow pl-3 overflow-hidden">
+      <p className="text-lg text-shadow truncate">{title}</p>
+      {description && (
+        <p className="rounded-sm mt-2 p-2 bg-black bg-opacity-40">
+          {description}
+        </p>
+      )}
     </div>
   </a>
 );

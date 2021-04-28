@@ -1,32 +1,36 @@
-import React, { useEffect, useState } from 'react';
-
-import videoOver from '../../assets/flowers.webm';
+import React from 'react';
+import useStorage from '../../hooks/useStorage.js';
 
 import LinkBox from '../LinkBox/LinkBox.jsx';
 import Footer from '../Footer/Footer.jsx';
-// import Toggle from '../Toggle/Toggle.jsx';
+import Toggle from '../Toggle/Toggle.jsx';
+
+import videoOver from '../../assets/flowers.webm';
 
 function App() {
-  const [{ onair, skins, features }, setLive] = useState({
+  const [{ onair, skins, features }] = useStorage('live', 'local', {
     onair: false,
     skins: [{}, {}],
     features: [],
   });
-  console.log(onair, skins, features);
+  // const { onair, skins, features } = {
+  //   onair: false,
+  //   skins: [{}, {}],
+  //   features: ['proxy'],
+  // };
+
+  const user = false;
+
+  console.log('render', onair, skins, features);
 
   const { url, background, icon, title, description } = skins[Number(onair)];
 
-  useEffect(() => {
-    if (window.chrome?.storage?.local) {
-      window.chrome.storage.local.get(['live'], ({ live }) => setLive(live));
-    }
-  }, []);
-
   return (
-    <div className="relative flex flex-col overflow-hidden w-96 h-52">
+    <div className="overflow-hidden max-w-100 w-100 relative flex flex-col text-white font-bold">
       <div className="absolute z-10 pointer-events-none">
         <video autoPlay muted loop src={videoOver}></video>
       </div>
+      <div className="flex-grow">
         <LinkBox
           url={url}
           background={background}
@@ -34,13 +38,26 @@ function App() {
           title={title}
           description={description}
         />
+      </div>
       {features.includes('proxy') && (
-        <Footer>
-          {/* <div className="flex-grow text-center">
-            Abonne toi pour écouter les playlists pandora
-          </div>
-          <Toggle onChange={(x) => x} value={false} /> */}
-        </Footer>
+        <div className="h-9">
+          {!user && (
+            <Footer className="bg-violet">
+              <div className="flex-grow text-center p-2">
+                Connecte toi pour écouter les playlists pandora
+              </div>
+              <Toggle />
+            </Footer>
+          )}
+          {user && (
+            <Footer className="bg-pandorablue">
+              <div className="flex-grow text-center p-2">
+                Abonne toi pour écouter les playlists pandora
+              </div>
+              <Toggle />
+            </Footer>
+          )}
+        </div>
       )}
     </div>
   );
