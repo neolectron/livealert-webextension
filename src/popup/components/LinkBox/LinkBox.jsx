@@ -1,7 +1,7 @@
 import React from 'react';
 import backgroundDay from '../../assets/backgroundDay.webp';
 import backgroundNight from '../../assets/backgroundNight.webp';
-import twitchLogo from '../../assets/twitchLogo.png';
+import twitchLogo from '../../assets/twitchLogo.webp';
 
 const currentHour = new Date().getHours();
 const isDay = currentHour > 7 && currentHour < 20;
