@@ -1,5 +1,5 @@
-import { livealertApi as api } from './config.js';
-import { setSkin, setCountdown } from './lib/alertlive.js';
+import { livealertApi as api } from '../config.js';
+import { setSkin, setCountdown } from '../lib/alertlive.js';
 import {
   isAfter,
   differenceInHours,
