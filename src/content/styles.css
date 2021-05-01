@@ -1,0 +1,55 @@
+.youtubeHQ {
+  padding: 0 0 2px 4px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.youtubeHQ label {
+  color: #aaa;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+input[type="checkbox"]#youtubeHQ-toggle {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+
+  height: 28px;
+  width: 55px;
+  border-radius: 14px;
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  border: 2px solid #474755;
+  background: linear-gradient(180deg, #2d2f39 0%, #1f2027 100%);
+  transition: all 0.2s ease;
+}
+
+input[type="checkbox"]#youtubeHQ-toggle:focus {
+  outline: 0;
+}
+
+input[type="checkbox"]#youtubeHQ-toggle:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
+  transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
+}
+
+input[type="checkbox"]#youtubeHQ-toggle:checked {
+  border-color: #654fec;
+}
+
+input[type="checkbox"]#youtubeHQ-toggle:checked:after {
+  transform: translatex(26px);
+}
