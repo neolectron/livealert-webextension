@@ -12,7 +12,7 @@ const twitch = {
 const youtubeHQApi = {
   url: 'http://localhost:4242',
   version: '',
-  path: '/live/sardoche',
+  path: '',
 };
 
 export { livealertApi as default, livealertApi, youtubeHQApi, twitch };
