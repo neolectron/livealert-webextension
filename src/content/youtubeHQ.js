@@ -1,34 +1,54 @@
-import { youtubeHQApi } from "../config.js";
+import { youtubeHQApi } from '../config.js';
+import messages from '../messages/messages.js';
 
-const disableYoutubeHQ = () =>
-  document.querySelector("audio#youtubeHQ-audio")?.pause();
+const getVideoIdFromURL = () => new URLSearchParams(location.search).get('v');
 
-const enableYoutubeHQ = () => {
-  const video = document.querySelector("video");
-  const audio = document.querySelector("audio#youtubeHQ-audio");
-
-  const syncTime = ({ target }) => {
-    console.info(target);
-    console.info(
-      "currentTime video - audio :",
-      video.currentTime,
-      audio.currentTime
-    );
-    audio.currentTime = video.currentTime;
-    audio.play();
-  };
-
-  video.addEventListener("playing", syncTime);
-
-  return () => {
-    video.removeEventListener("playing", syncTime);
-  };
+const fetchHQVideoList = async () => {
+  const res = await fetch(`${youtubeHQApi.url}${youtubeHQApi.version}/sound`);
+  return res.json();
 };
 
-const handleChange = ({ target }) => {
-  const video = document.querySelector("video");
-  const audio = document.querySelector("audio#youtubeHQ-audio");
-  const muteBtn = document.querySelector(".ytp-mute-button");
+const initAudio = () => {
+  const audio = document.createElement('audio');
+  audio.setAttribute('id', 'youtubeHQ-audio');
+  audio.setAttribute('preload', 'metadata');
+  audio.setAttribute('muted', true);
+  document.body.appendChild(audio);
+  return audio;
+};
+
+const insertToggle = (onChange) => {
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('youtubeHQ');
+
+  const label = document.createElement('label');
+  label.setAttribute('for', 'youtubeHQ-toggle');
+  label.innerText = 'YOUTUBE-HQ';
+  wrapper.appendChild(label);
+
+  const toggle = document.createElement('input');
+  toggle.setAttribute('id', 'youtubeHQ-toggle');
+  toggle.setAttribute('type', 'checkbox');
+  wrapper.appendChild(toggle);
+
+  const youtubeMenu = document.querySelector(
+    'ytd-menu-renderer.ytd-video-primary-info-renderer'
+  );
+
+  //FIXME: youtubeMenu is null sometimes.
+  console.log('pre insertion:', wrapper);
+  console.log('inserting toggle in ', youtubeMenu);
+  youtubeMenu.appendChild(wrapper);
+  console.log('inserted', youtubeMenu.querySelector('.youtubeHQ'));
+
+  toggle.addEventListener('change', onChange);
+  return () => toggle.removeEventListener('change', onChange);
+};
+
+const handleToggleChange = ({ target }) => {
+  const video = document.querySelector('video');
+  const audio = document.querySelector('audio#youtubeHQ-audio');
+  const muteBtn = document.querySelector('.ytp-mute-button');
 
   if (target.checked) {
     !video.muted && muteBtn.click();
@@ -39,74 +59,45 @@ const handleChange = ({ target }) => {
   }
 };
 
-const insertToggle = (parentElement) => {
-  const wrapper = document.createElement("div");
-  wrapper.classList.add("youtubeHQ");
-
-  const label = document.createElement("label");
-  label.setAttribute("for", "youtubeHQ-toggle");
-  label.innerText = "YOUTUBE-HQ";
-  wrapper.appendChild(label);
-
-  const toggle = document.createElement("input");
-  toggle.setAttribute("id", "youtubeHQ-toggle");
-  toggle.setAttribute("type", "checkbox");
-  toggle.addEventListener("change", handleChange);
-  wrapper.appendChild(toggle);
-
-  const audio = document.createElement("audio");
-  const videoID = new URLSearchParams(location.search).get("v");
-  audio.setAttribute("id", "youtubeHQ-audio");
-  audio.setAttribute("preload", "metadata");
-  audio.setAttribute("muted", true);
-  audio.setAttribute(
-    "src",
-    `${youtubeHQApi.url}${youtubeHQApi.version}/data/${videoID}.flac`
-  );
-
-  console.info("inserting audio markup");
-  console.info("inserting youtubeHQ button");
-  document.body.appendChild(audio);
-  parentElement.appendChild(wrapper);
-
-  return () => toggle.removeEventListener("change", handleChange);
+const handleStatusChange = (event) => {
+  // property list: currentTime, duration, loop, muted, src.
+  console.info(event);
 };
 
-// INIT
-(async () => {
-  console.info("init");
-  const removeListenerList = [];
-  // Get all the asmr video list
-  const enhancedVideoList = await fetch(
-    `${youtubeHQApi.url}${youtubeHQApi.version}/sound`
-  ).then((res) => res.json());
+// please, find a better pattern that properly handle async.
+const HQVideoList = [];
+fetchHQVideoList().then((json) => {
+  HQVideoList.push(...json);
+});
 
-  // a derivated solution inspired by (because his doesn't work)
-  // https://stackoverflow.com/questions/18397962/chrome-extension-is-not-loading-on-browser-navigation-at-youtube/18398921#18398921
-  (document.body || document.documentElement).addEventListener(
-    "transitionend",
-    () => {
-      console.info("transitionend");
+const audio = initAudio();
 
-      if (
-        !enhancedVideoList.includes(
-          new URLSearchParams(location.search).get("v")
-        )
-      )
-        return;
-      console.info("url is an asmr url");
+const listenerToClear = [];
+chrome.runtime.onMessage.addListener((message) => {
+  // stop the music playing ?
+  //TODO: listenerToClear has to be cleared at some point
+  if (message !== messages.HISTORY_STATE_UPDATED) return;
+  const videoID = getVideoIdFromURL();
+  if (!HQVideoList.includes(videoID)) return;
 
-      const buttonMenu = document.querySelector(
-        "ytd-menu-renderer.ytd-video-primary-info-renderer #top-level-buttons"
-      );
-      if (!buttonMenu || buttonMenu.querySelector(".youtubeHQ")) return;
-      console.info("menu is present on the page");
+  console.info(`"${videoID}" is an enhanced video`);
 
-      removeListenerList.forEach((removeListener) => removeListener());
+  const video = document.querySelector('video');
 
-      removeListenerList.push(insertToggle(buttonMenu));
-      removeListenerList.push(enableYoutubeHQ());
-    },
-    true
-  );
-})();
+  const clearToggleListener = insertToggle(handleToggleChange);
+  listenerToClear.push(clearToggleListener);
+
+  audio.src = `${youtubeHQApi.url}${youtubeHQApi.version}/data/${videoID}.flac`;
+
+  const playVideoListener = [
+    'play',
+    'pause',
+    'waiting',
+    'seeking',
+    'volumechange',
+  ].map((event) => {
+    video.addEventListener(event, handleStatusChange);
+    return video.removeEventListener(event, handleStatusChange);
+  });
+  listenerToClear.push(...playVideoListener);
+});
