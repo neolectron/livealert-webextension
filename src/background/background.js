@@ -23,7 +23,7 @@ const fetchLive = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'X-API-Key': `${window.chrome.runtime.id}`,
+      'X-API-Key': `${chrome.runtime.id}`,
     },
     cache: 'default',
   });
@@ -76,10 +76,10 @@ poll(async () => {
     clearTimeout(offlineTimeout);
     offlineTimeout = null;
 
-    window.chrome.storage.local.set({ live });
+    chrome.storage.local.set({ live });
     handleChange(live);
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     if (offlineTimeout) return;
 
     console.info(
@@ -87,7 +87,7 @@ poll(async () => {
     );
 
     offlineTimeout = setTimeout(() => {
-      window.chrome.storage.local.set({});
+      chrome.storage.local.set({});
       handleChange({});
     }, 300 * 1000);
   }
