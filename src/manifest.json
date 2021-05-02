@@ -7,7 +7,7 @@
   "browser_action": {
     "default_popup": "popup/index.html",
     "default_icon": "icons/128-light.png",
-    "theme_icons" : [
+    "theme_icons": [
       {
         "light": "icons/16-light.png",
         "dark": "icons/16-dark.png",
@@ -25,8 +25,8 @@
       }
     ]
   },
-  "background" : {
-    "scripts": ["background/background.js"]
+  "background": {
+    "scripts": ["background/background.js", "background/webNavigation.js"]
   },
   "content_scripts": [
     {
@@ -41,9 +41,6 @@
     "128": "icons/128-light.png"
   },
   "incognito": "spanning",
-  "permissions": [
-    "storage",
-    "notifications"
-  ],
+  "permissions": ["storage", "notifications", "webNavigation"],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

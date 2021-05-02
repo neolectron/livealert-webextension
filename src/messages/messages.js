@@ -1,0 +1,1 @@
+export default { HISTORY_STATE_UPDATED: 'HISTORY_STATE_UPDATED' };
