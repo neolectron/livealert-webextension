@@ -1,26 +1,31 @@
 import { useState, useEffect } from 'react';
+const { storage } = chrome || browser;
 
-// this hook only work in a webextension context.
+// this hook only work in a webextension env.
 const useStorage = (key, area = 'local', initialValue) => {
   const [value, set] = useState(initialValue);
-  const { storage } = window.chrome || window.browser;
 
   useEffect(() => {
-    storage[area].get(key, (data) => set(data[key]));
-  }, [key, area, storage]);
+    storage[area].get(key, (data) => {
+      if (initialValue && !data[key]) {
+        return storage[area].set({
+          [key]: initialValue,
+        });
+      }
+      set(data[key]);
+    });
 
-  useEffect(() => {
-    const setData = (data) => set(data[key].newValue);
+    const setChangedData = (data) => set(data[key].newValue);
 
-    storage.onChanged.addListener(setData);
-    return () => storage.onChanged.removeListener(setData);
-  }, [key, storage.onChanged]);
+    storage.onChanged.addListener(setChangedData);
+    return () => storage.onChanged.removeListener(setChangedData);
+  }, [key, area, initialValue]);
 
   return [
     value,
-    (value) => {
+    (newValue) => {
       storage[area].set({
-        [key]: value,
+        [key]: newValue,
       });
     },
   ];
