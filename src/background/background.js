@@ -19,14 +19,7 @@ const poll = async (promiseFn, time) => {
 
 const fetchLive = async () => {
   const url = new URL(`${api.version}${api.path}`, api.url);
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': `${chrome.runtime.id}`,
-    },
-    cache: 'default',
-  });
+  const res = await fetch(url);
 
   if (!res.ok) {
     throw new Error(
