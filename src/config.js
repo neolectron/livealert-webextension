@@ -1,7 +1,7 @@
 const livealertApi = {
-  url: 'http://localhost:3131',
+  url: 'https://sardoche.tv',
   version: '',
-  path: '/live/sardoche',
+  path: '/live.json',
 };
 
 const twitch = {
@@ -10,7 +10,7 @@ const twitch = {
 };
 
 const youtubeHQApi = {
-  url: 'http://localhost:4242',
+  url: 'https://api.sardoche.tv/',
   version: '',
   path: '',
 };
