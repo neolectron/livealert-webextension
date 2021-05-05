@@ -6,24 +6,21 @@ import Footer from '../Footer/Footer.jsx';
 import Toggle from '../Toggle/Toggle.jsx';
 
 import videoOver from '../../assets/flowers.webm';
+const user = false;
+
+const initialState = {
+  onair: false,
+  skins: [],
+  features: [],
+};
 
 function App() {
-  const [{ onair, skins, features }] = useStorage('live', 'local', {
-    onair: false,
-    skins: [{}, {}],
-    features: [],
-  });
-  // const { onair, skins, features } = {
-  //   onair: false,
-  //   skins: [{}, {}],
-  //   features: ['proxy'],
-  // };
+  const [live] = useStorage('live', 'local', initialState);
 
-  const user = false;
-
-  console.log('render', onair, skins, features);
-
-  const { url, background, icon, title, description } = skins[Number(onair)];
+  console.log('live:', live);
+  const { onair, features, skins } = live;
+  const currentSkin = skins[Number(onair)] || {};
+  const { url, background, icon, title, description } = currentSkin;
 
   return (
     <div className="overflow-hidden max-w-100 w-100 relative flex flex-col text-white font-bold">
