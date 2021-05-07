@@ -1,15 +1,7 @@
 import React from 'react';
 
-const FooterButton = ({ onClick, href = '#', className = '', children }) => (
-  <a
-    className={`p-2 h-full flex items-center ${className}`}
-    onClick={onClick}
-    href={href}
-    target="_blank"
-    rel="noreferrer"
-  >
-    {children}
-  </a>
+const Footer = ({ className = '', children }) => (
+  <div className={`h-9 px-2 flex items-center ${className}`}>{children}</div>
 );
 
-export default FooterButton;
+export default Footer;
