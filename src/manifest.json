@@ -41,6 +41,12 @@
     "128": "icons/128-light.png"
   },
   "incognito": "spanning",
-  "permissions": ["storage", "notifications", "webNavigation"],
+  "permissions": [
+    "storage",
+    "notifications",
+    "webNavigation",
+    "identity",
+    "proxy"
+  ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

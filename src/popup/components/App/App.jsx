@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useStorage from '../../hooks/useStorage.js';
+import {
+  checkUserIsSub,
+  getUserDetails,
+  initTwitchAuth,
+} from '../../utils/twitchApi.js';
 
 import LinkBox from '../LinkBox/LinkBox.jsx';
 import Footer from '../Footer/Footer.jsx';
 import Toggle from '../Toggle/Toggle.jsx';
 
 import videoOver from '../../assets/flowers.webm';
-const user = false;
+import useProxy from '../../hooks/useProxy.js';
 
 const initialState = {
   onair: false,
@@ -16,6 +21,37 @@ const initialState = {
 
 function App() {
   const [live] = useStorage('live', 'local', initialState);
+  const [user, setUser] = useStorage('user', 'local', false);
+  const [proxy, setProxy] = useStorage('proxy', 'local', null);
+  const [, setProxyStatus] = useProxy(
+    false,
+    'pandora.com',
+    'proxy.sardoche.tv',
+    443
+  );
+  const [isSub, setIsSub] = useState(false);
+
+  // when logged-in check if sub and set proxy accordingly
+  useEffect(() => {
+    if (!user) return;
+
+    checkUserIsSub(user.token, user.id).then((subStatus) => {
+      if (!subStatus) setProxy(false);
+      setIsSub(subStatus);
+    });
+  }, [user, setProxy]);
+
+  // when the proxy state change is storage, enable/disable the proxy
+  useEffect(() => {
+    if (proxy === null) return;
+    setProxyStatus(proxy);
+  }, [proxy, setProxyStatus]);
+
+  const logIn = async () => {
+    const token = await initTwitchAuth();
+    const userDetails = await getUserDetails(token);
+    setUser({ ...userDetails, token });
+  };
 
   console.log('live:', live);
   const { onair, features, skins } = live;
@@ -37,24 +73,28 @@ function App() {
         />
       </div>
       {features.includes('proxy') && (
-        <div className="h-9">
-          {!user && (
-            <Footer className="bg-violet">
-              <div className="flex-grow text-center p-2">
-                Connecte toi pour écouter les playlists pandora
-              </div>
-              <Toggle />
-            </Footer>
-          )}
-          {user && (
-            <Footer className="bg-pandorablue">
-              <div className="flex-grow text-center p-2">
-                Abonne toi pour écouter les playlists pandora
-              </div>
-              <Toggle />
-            </Footer>
-          )}
-        </div>
+        <Footer className={user ? 'bg-pandorablue' : 'bg-violet'}>
+          <a
+            className="cursor-pointer h-full flex-grow flex items-center justify-center"
+            target="_blank"
+            {...(!user && { onClick: logIn })}
+            {...(user && !isSub && { href: 'https://subs.twitch.tv/sardoche' })}
+            {...(user && isSub && { href: 'https://pandora.com' })}
+          >
+            {!user ? 'Connecte toi pour écouter les playlists pandora !' : null}
+            {user && !isSub
+              ? 'Abonne toi pour bénéficier du proxy pandora !'
+              : null}
+            {user && isSub
+              ? 'Écoute mes playlist pandora grace au proxy !'
+              : null}
+          </a>
+          <Toggle
+            disabled={!user || !isSub}
+            checked={proxy}
+            onChange={({ target }) => setProxy(target.checked)}
+          />
+        </Footer>
       )}
     </div>
   );
