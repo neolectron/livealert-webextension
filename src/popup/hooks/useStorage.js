@@ -15,7 +15,10 @@ const useStorage = (key, area = 'local', initialValue) => {
       set(data[key]);
     });
 
-    const setChangedData = (data) => set(data[key].newValue);
+    const setChangedData = (data) => {
+      if (!data[key]) return;
+      set(data[key].newValue);
+    };
 
     storage.onChanged.addListener(setChangedData);
     return () => storage.onChanged.removeListener(setChangedData);
