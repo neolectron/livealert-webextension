@@ -10,7 +10,7 @@ const twitch = {
 };
 
 const youtubeHQApi = {
-  url: 'https://api.sardoche.tv/',
+  url: 'https://api.sardoche.tv',
   version: '',
   path: '',
 };
