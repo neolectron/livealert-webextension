@@ -8,6 +8,10 @@ import {
   format,
 } from 'date-fns';
 
+import icon from '../icons/48-light.png';
+
+const { storage, notifications } = chrome;
+
 const sleep = (time) =>
   new Promise((resolve) => setTimeout(resolve, time * 1000));
 
@@ -69,8 +73,27 @@ poll(async () => {
     clearTimeout(offlineTimeout);
     offlineTimeout = null;
 
-    chrome.storage.local.set({ live });
-    handleChange(live);
+    storage.local.get(['live', 'notif'], (data) => {
+      const prevLive = data.live;
+      const notif = data.notif;
+
+      const changed = isAfter(
+        new Date(live.updatedAt),
+        new Date(prevLive.updatedAt)
+      );
+
+      if (notif && changed && !prevLive.onair && live.onair) {
+        notifications.create(live.updatedAt, {
+          iconUrl: icon,
+          title: `${live.username} lance un live !`,
+          message: live.skins[1]?.title || '',
+          type: 'basic',
+        });
+      }
+
+      storage.local.set({ live });
+      handleChange(live);
+    });
   } catch (err) {
     // console.error(err);
     if (offlineTimeout) return;
@@ -80,7 +103,7 @@ poll(async () => {
     );
 
     offlineTimeout = setTimeout(() => {
-      chrome.storage.local.set({});
+      storage.local.set({});
       handleChange({});
     }, 300 * 1000);
   }
