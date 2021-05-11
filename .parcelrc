@@ -1,6 +1,6 @@
 {
   "extends": "@parcel/config-webextension",
     "transformers": {
-    "*.{png,webp,webm}": ["@parcel/transformer-raw"]
+    "*.{png,webp,webm,svg}": ["@parcel/transformer-raw"]
   }
 }

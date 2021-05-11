@@ -9,6 +9,7 @@ import {
 import LinkBox from '../LinkBox/LinkBox.jsx';
 import Footer from '../Footer/Footer.jsx';
 import Toggle from '../Toggle/Toggle.jsx';
+import NotifButton from '../NotifButton/NotifButton.jsx';
 
 import videoOver from '../../assets/flowers.webm';
 import useProxy from '../../hooks/useProxy.js';
@@ -22,6 +23,7 @@ const initialState = {
 function App() {
   const [live] = useStorage('live', 'local', initialState);
   const [user, setUser] = useStorage('user', 'local', false);
+  const [notif, setNotif] = useStorage('notif', 'local', false);
   const [proxy, setProxy] = useStorage('proxy', 'local', null);
   const [, setProxyStatus] = useProxy(
     false,
@@ -54,12 +56,19 @@ function App() {
   };
 
   console.log('live:', live);
+  console.log('notif', notif);
   const { onair, features, skins } = live;
   const currentSkin = skins[Number(onair)] || {};
   const { url, background, icon, title, description } = currentSkin;
 
   return (
     <div className="overflow-hidden max-w-100 w-100 relative flex flex-col text-white font-bold">
+      <div className="absolute flex justify-center items-center w-7 h-7 top-2 right-2">
+        <NotifButton
+          checked={notif}
+          onChange={({ target }) => setNotif(target.checked)}
+        />
+      </div>
       <div className="absolute z-10 pointer-events-none">
         <video autoPlay muted loop src={videoOver}></video>
       </div>
