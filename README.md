@@ -34,7 +34,7 @@ If you have any issue with this process, please, consider opening a [Github Issu
 
 ## Hosting your own
 
-LiveAlert use Parcel 2 to build itself as a webextension.
+LiveAlert uses Parcel 2 to build itself as a webextension.
 
 You will find an already configured extension in `src/manifest.json` and `src/popup/` you can just edit it, or remove it completly.
 
@@ -65,4 +65,4 @@ The main purpose of this repository is to continue evolving LiveAlert, making it
 
 ## License
 
-Licensed under [MIT](./LICENSE).
+Licensed under [MIT](./LICENSE.md).
