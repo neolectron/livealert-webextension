@@ -11,7 +11,7 @@
   "scripts": {
     "start": "parcel src/manifest.json --host localhost --target webext-dev",
     "build": "parcel build src/manifest.json --target webext-prod",
-    "build-dev": "parcel build src/manifest.json --target webext-dev --no-optimize",
+    "build-dev": "NODE_ENV=development parcel build src/manifest.json --target webext-dev --no-optimize",
     "build-scan": "parcel build src/manifest.json --target webext-prod --reporter @parcel/reporter-bundle-analyzer",
     "clear": "rm -rf dist .parcel-cache parcel-bundle-reports"
   },
