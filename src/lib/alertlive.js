@@ -1,8 +1,5 @@
-const {
-  setIcon,
-  setBadgeText,
-  setBadgeBackgroundColor,
-} = window.chrome.browserAction;
+const { setIcon, setBadgeText, setBadgeBackgroundColor } =
+  window.chrome.browserAction;
 
 let hasCountdown = null;
 const clearCountdown = () => {
@@ -14,7 +11,9 @@ const setCountdown = (timeLeft) => {
   clearCountdown();
   hasCountdown = setInterval(
     () =>
-      timeLeft >= 0 ? setBadgeText({ text: timeLeft-- }) : clearCountdown(),
+      timeLeft >= 0
+        ? setBadgeText({ text: `${timeLeft--}` })
+        : clearCountdown(),
     1000
   );
 };
