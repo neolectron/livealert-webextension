@@ -26,12 +26,12 @@
     ]
   },
   "background": {
-    "scripts": ["background/background.js", "background/webNavigation.js"]
+    "scripts": ["background/background.ts", "background/webNavigation.ts"]
   },
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
-      "js": ["content/youtubeHQ.js"],
+      "js": ["content/youtubeHQ.ts"],
       "css": ["content/styles.css"]
     }
   ],
