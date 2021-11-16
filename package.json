@@ -3,13 +3,13 @@
   "version": "1.0",
   "private": true,
   "dependencies": {
-    "date-fns": "^2.21.1",
+    "date-fns": "^2.25.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-toggle": "^4.1.2"
   },
   "scripts": {
-    "start": "parcel src/manifest.json --host localhost --target webext-dev",
+    "start": "parcel src/manifest.json --target webext-dev --hmr-port 1172",
     "build": "parcel build src/manifest.json --target webext-prod",
     "build-dev": "NODE_ENV=development parcel build src/manifest.json --target webext-dev --no-optimize",
     "build-scan": "parcel build src/manifest.json --target webext-prod --reporter @parcel/reporter-bundle-analyzer",
@@ -25,15 +25,15 @@
     "webext-prod": {}
   },
   "devDependencies": {
-    "@parcel/config-webextension": "^2.0.0-nightly.2266",
-    "@parcel/reporter-bundle-analyzer": "^2.0.0-nightly.2266",
+    "@parcel/config-webextension": "^2.0.1",
+    "@parcel/reporter-bundle-analyzer": "^2.0.1",
     "@tailwindcss/postcss7-compat": "^2.1.0",
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.4.0",
     "eslint": "^7.13.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "parcel": "^2.0.0-nightly.642",
-    "postcss": "^7.0.35",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
+    "parcel": "^2.0.1",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^2.2.19"
   }
 }
