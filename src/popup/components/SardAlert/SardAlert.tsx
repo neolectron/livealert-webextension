@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import useStorage from '../../hooks/useStorage.js';
+import useStorage from '../../hooks/useStorage';
 import {
   checkUserIsSub,
   getUserDetails,
   initTwitchAuth,
-} from '../../utils/twitchApi.js';
+} from '../../utils/twitchApi';
 
-import LinkBox from '../LinkBox/LinkBox.jsx';
-import Footer from '../Footer/Footer.jsx';
-import Toggle from '../Toggle/Toggle.jsx';
-import NotifButton from '../NotifButton/NotifButton.jsx';
+import LinkBox from '../LinkBox/LinkBox';
+import Footer from '../Footer/Footer';
+import Toggle from '../Toggle/Toggle';
+import NotifButton from '../NotifButton/NotifButton';
 
 import videoOver from '../../assets/flowers.webm';
-import useProxy from '../../hooks/useProxy.js';
+import useProxy from '../../hooks/useProxy';
 
 const initialState = {
   onair: false,
@@ -62,8 +62,8 @@ function App() {
   const { url, background, icon, title, description } = currentSkin;
 
   return (
-    <div className="overflow-hidden max-w-100 w-100 relative flex flex-col text-white font-bold">
-      <div className="absolute flex justify-center items-center w-7 h-7 top-2 right-2">
+    <div className="max-w-100 w-100 relative flex flex-col overflow-hidden font-bold text-white">
+      <div className="w-7 h-7 top-2 right-2 absolute flex items-center justify-center">
         <NotifButton
           checked={notif}
           onChange={({ target }) => setNotif(target.checked)}
@@ -84,7 +84,7 @@ function App() {
       {features.includes('proxy') && (
         <Footer className={user ? 'bg-pandorablue' : 'bg-violet'}>
           <a
-            className="cursor-pointer h-full flex-grow flex items-center justify-center"
+            className="flex items-center justify-center flex-grow h-full cursor-pointer"
             target="_blank"
             {...(!user && { onClick: logIn })}
             {...(user && !isSub && { href: 'https://subs.twitch.tv/sardoche' })}
