@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import useStorage from '../../hooks/useStorage';
-import {
-  checkUserIsSub,
-  getUserDetails,
-  initTwitchAuth,
-} from '../../utils/twitchApi';
+import { useEffect, useState } from 'react';
 
+import VideoOver from '../VideoOver/VideoOver';
 import LinkBox from '../LinkBox/LinkBox';
 import Footer from '../Footer/Footer';
 import Toggle from '../Toggle/Toggle';
 import NotifButton from '../NotifButton/NotifButton';
 
-import videoOver from '../../assets/flowers.webm';
 import useProxy from '../../hooks/useProxy';
+import useStorage from '../../hooks/useStorage';
+
+import {
+  checkUserIsSub,
+  getUserDetails,
+  initTwitchAuth,
+} from '../../utils/twitchApi';
 
 const initialState = {
   onair: false,
@@ -69,9 +70,7 @@ function App() {
           onChange={({ target }) => setNotif(target.checked)}
         />
       </div>
-      <div className="absolute z-10 pointer-events-none">
-        <video autoPlay muted loop src={videoOver}></video>
-      </div>
+      <VideoOver />
       <div className="flex-grow">
         <LinkBox
           url={url}
