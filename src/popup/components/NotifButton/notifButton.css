@@ -1,6 +1,9 @@
 .notif-button {
   position: relative;
   cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 5px;
+  border-radius: 50%;
 }
 
 .notif-button input[type='checkbox'] {
@@ -15,11 +18,11 @@
 }
 
 .notif-button img {
-  filter: drop-shadow(2px 2px 2px crimson);
+  filter: drop-shadow(1px 1px 1px crimson);
   height: 20px;
   width: 20px;
 }
 
 .notif-button.checked img {
-  filter: drop-shadow(2px 2px 2px dodgerblue);
+  filter: drop-shadow(1px 1px 1px dodgerblue);
 }
