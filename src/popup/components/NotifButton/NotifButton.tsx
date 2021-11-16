@@ -1,4 +1,3 @@
-import React from 'react';
 import './notifButton.css';
 import bell from './bell.svg';
 import belloff from './bell-off.svg';
