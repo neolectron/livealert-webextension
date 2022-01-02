@@ -4,6 +4,11 @@
   "version": "17.0",
   "description": "Tenez vous informé des lives de Sardoche ! Si vous êtes abonné, profitez du proxy pour débloquer pandora.com, ainsi que youtube-audio HQ !",
   "offline_enabled": false,
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "91.1.0"
+    }
+  },
   "browser_action": {
     "default_popup": "popup/index.html",
     "default_icon": "icons/128-light.png",
